@@ -3,9 +3,5 @@ git-tree-sha1 = "ca9246bdc04913f5872c275c1f375e5fdcd04035"
 lazy = true
 
     [[ids.download]]
-    url = "TODO: get link after release"
-    sha256 = "bfc7a8c9f9f5616ebf543bd6681e67314e9f7ae237e5ae8c6f15bdc5c6a6"
-
-    [[ids.download]]
-    url = "https://raw.githubusercontent.com/cjkvi/cjkvi-ids/master/ids.txt"
-    sha256 = "bfc7a8c9f9f5616ebf543bd6681e67314e9f7ae237e5ae8c6f15bdc5c6a6"
+    url = "https://github.com/tmthyln/IDSFiles.jl/releases/download/v0.0.1/ids.tar.gz"
+    sha256 = "be271d0d92f5cd0059e507b96a7ceafc009df52ccee5df8c56a64a739edd5737"
