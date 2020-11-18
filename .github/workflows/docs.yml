@@ -1,0 +1,36 @@
+name: Documentation
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  make-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checks-out repository under $GITHUB_WORKSPACE
+    - name: Checkout Project
+      uses: actions/checkout@v2
+    - name: Install SSH Client
+      continue-on-error: true
+      uses: webfactory/ssh-agent@v0.2.0
+      with:
+        ssh-private-key: ${{ secrets.PRIV_SSH_KEY }}
+    - name: Setup Julia environment
+      uses: julia-actions/setup-julia@v1.4
+      with:
+        version: 1.5
+        arch: x64
+    - name: Generate Documentation
+      run: cd docs/; julia -e '
+        using Pkg; Pkg.add(["Documenter"]);
+        Pkg.activate(".."); Pkg.instantiate();
+        include("make.jl")'
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        SSH: true
+        BRANCH: gh-pages
+        FOLDER: docs/build/
+
