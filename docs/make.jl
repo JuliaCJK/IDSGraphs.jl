@@ -9,6 +9,7 @@ makedocs(
     ),
     modules=[IDSFiles],
     pages=[
+    "Documentation Home" => "index.md",
         "API Reference" => [
             "Structures" => "api_structures.md",
             "Component Dependency Graphs" => "api_depgraphs.md"
@@ -18,5 +19,6 @@ makedocs(
 
 deploydocs(
     repo = "github.com/tmthyln/IDSFiles.jl.git",
-    devbranch = "main"
-)
+    devbranch = "main",
+    devurl="latest"
+    )
