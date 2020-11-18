@@ -18,4 +18,5 @@ makedocs(
 
 deploydocs(
     repo = "github.com/tmthyln/IDSFiles.jl.git",
+    devbranch = "main"
 )
