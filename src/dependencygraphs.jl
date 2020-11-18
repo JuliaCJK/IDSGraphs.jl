@@ -1,5 +1,6 @@
 using LightGraphs
 import LightGraphs: add_vertex!, add_edge!, SimpleDiGraph
+using Pkg.Artifacts
 
 # Dependency graph struct creation
 # --------------------------------
@@ -40,7 +41,22 @@ Base.getindex(dep::DependencyGraph, char::Char) = dep.structures[char]
 Base.length(dep::DependencyGraph) = nv(dep.graph)
 LightGraphs.nv(dep::DependencyGraph) = nv(dep.graph)
 
-function load_dependency_graph(; file = "cache/ids.txt")
+function load_dependency_graph()
+    # artifact management
+    artifact_toml = joinpath(@__DIR__, "Artifacts.toml")
+    ids_hash = artifact_hash("ids", artifact_toml)
+
+    if ids_hash === nothing || !artifact_exists(ids_hash)
+        ids_hash = create_artifact() do artifact_dir
+            ids_url = "https://raw.githubusercontent.com/cjkvi/cjkvi-ids/master/ids.txt"
+            download(ids_url, joinpath(artifact_dir, "ids.txt"))
+        end
+
+        bind_artifact!(artifact_toml, "ids", ids_hash)
+    end
+
+    file = joinpath(artifact_path(ids_hash), "ids.txt")
+
     pattern = r"^[^\s]+\s+([^\s])\s+(.+)$"
 
     dep = DependencyGraph()
