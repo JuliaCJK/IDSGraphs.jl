@@ -8,7 +8,7 @@ makedocs(
     format=Documenter.HTML(
         prettyurls=get(ENV, "CI", nothing) == "true"
     ),
-    modules=[IDSFiles],
+    modules=[IDSGraphs],
     pages=[
         "Home" => "index.md",
         "Quick Start" => "guide_quickstart.md",

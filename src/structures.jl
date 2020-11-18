@@ -9,9 +9,9 @@ abstract type AbstractCharStructure end
 struct Component <: AbstractCharStructure
     component::Char
 end
-struct LeftRightStructure <: AbstractCharStructure
-    left::AbstractCharStructure
-    right::AbstractCharStructure
+struct LeftRightStructure{L<:AbstractCharStructure, R<:AbstractCharStructure} <: AbstractCharStructure
+    left::L
+    right::R
 end
 struct TopBottomStructure <: AbstractCharStructure
     top::AbstractCharStructure
