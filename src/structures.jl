@@ -105,7 +105,14 @@ Parse a single IDS string that describes a character/component's decomposition. 
 does not do any input validation to verify that the string can actually represent a
 decomposition; in this case, the method will fail.)
 
-## Examples
+This is a relatively low-level method; you typically do not need to call this directly.
+
+# Examples
+We can take the IDS string itself and parse it as a nested structure.
+```jldoctest
+julia> IDSFiles.parse("⿱此二")
+CharStructure{TopBottomStructure}(TopBottomStructure(Component('此'), Component('二')))
+```
 
 """
 function parse(str::AbstractString)

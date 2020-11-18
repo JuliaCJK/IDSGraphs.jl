@@ -26,3 +26,4 @@ Manifest.toml
 
 # Development
 .idea/
+cache/

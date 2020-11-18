@@ -15,7 +15,7 @@ DependencyGraph() = DependencyGraph(
         Vector{Char}(),
         Dict{Char, CharStructure}())
 
-function add_vertex!(dep::DependencyGraph, vertex::Char)
+function LightGraphs.add_vertex!(dep::DependencyGraph, vertex::Char)
     if !haskey(dep.mapping, vertex)
         add_vertex!(dep.graph)
         dep.mapping[vertex] = nv(dep.graph)
@@ -24,7 +24,7 @@ function add_vertex!(dep::DependencyGraph, vertex::Char)
     nothing
 end
 
-function add_edge!(dep::DependencyGraph, from::Char, to::Char)
+function LightGraphs.add_edge!(dep::DependencyGraph, from::Char, to::Char)
     add_vertex!(dep, from)
     add_vertex!(dep, to)
     add_edge!(dep.graph, dep.mapping[from], dep.mapping[to])
