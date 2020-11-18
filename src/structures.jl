@@ -110,7 +110,7 @@ This is a relatively low-level method; you typically do not need to call this di
 # Examples
 We can take the IDS string itself and parse it as a nested structure.
 ```jldoctest
-julia> IDSFiles.parse("⿱此二")
+julia> parse("⿱此二")
 CharStructure{TopBottomStructure}(TopBottomStructure(Component('此'), Component('二')))
 ```
 

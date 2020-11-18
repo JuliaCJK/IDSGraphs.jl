@@ -1,6 +1,7 @@
 push!(LOAD_PATH, "../src/")
 
 using Documenter, IDSFiles
+using DataStructures
 
 makedocs(
     sitename="IDSFiles.jl Documentation",
