@@ -4,7 +4,7 @@ using Documenter, IDSFiles
 using DataStructures
 
 makedocs(
-    sitename="IDSFiles.jl Documentation",
+    sitename="IDSGraphs.jl Documentation",
     format=Documenter.HTML(
         prettyurls=get(ENV, "CI", nothing) == "true"
     ),
@@ -21,7 +21,7 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/tmthyln/IDSFiles.jl.git",
+    repo = "github.com/tmthyln/IDSGraphs.jl.git",
     devbranch = "main",
     devurl="latest"
     )
