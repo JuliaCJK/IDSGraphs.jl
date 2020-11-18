@@ -6,6 +6,8 @@ Still in early development! APIs have yet to be finalized, more basic features w
 ```@contents
 ```
 
-## Index
-```@index
+## Installation
+This package can be installed as usual via Pkg:
+```julia-repl
+julia> ] add IDSFiles
 ```

@@ -2,7 +2,10 @@ using DataStructures
 
 # Structure Types
 # ---------------
+"""Supertype for character structures."""
 abstract type AbstractCharStructure end
+
+"""Leaf node of a structure tree; this contains a single component."""
 struct Component <: AbstractCharStructure
     component::Char
 end
@@ -95,6 +98,16 @@ function parse(tokens::Stack{Char})::AbstractCharStructure
     end
 end
 
+"""
+    IDSFiles.parse(::AbstractString)
+
+Parse a single IDS string that describes a character/component's decomposition. (This function
+does not do any input validation to verify that the string can actually represent a
+decomposition; in this case, the method will fail.)
+
+## Examples
+
+"""
 function parse(str::AbstractString)
     tokens = Stack{Char}()
     for char in reverse(str)

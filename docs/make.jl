@@ -10,6 +10,7 @@ makedocs(
     modules=[IDSFiles],
     pages=[
         "Home" => "index.md",
+        "Quick Start" => "guide_quickstart.md",
         "API Reference" => [
             "Structures" => "api_structures.md",
             "Component Dependency Graphs" => "api_depgraphs.md",
