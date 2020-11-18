@@ -1,6 +1,6 @@
 push!(LOAD_PATH, "../src/")
 
-using Documenter, IDSFiles
+using Documenter, IDSGraphs
 using DataStructures
 
 makedocs(

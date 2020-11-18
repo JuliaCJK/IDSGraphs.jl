@@ -1,4 +1,4 @@
-using IDSFiles
+using IDSGraphs
 using Test
 
 @testset "unit tests" begin
