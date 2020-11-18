@@ -9,10 +9,11 @@ makedocs(
     ),
     modules=[IDSFiles],
     pages=[
-    "Documentation Home" => "index.md",
+        "Home" => "index.md",
         "API Reference" => [
             "Structures" => "api_structures.md",
-            "Component Dependency Graphs" => "api_depgraphs.md"
+            "Component Dependency Graphs" => "api_depgraphs.md",
+            "Internals" => "api_internals.md"
         ]
     ]
 )
