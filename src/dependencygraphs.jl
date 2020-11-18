@@ -4,19 +4,19 @@ using Pkg.Artifacts
 
 # Dependency graph struct creation
 # --------------------------------
-struct DependencyGraph
+struct IDSGraph
     graph::SimpleDiGraph{UInt32}
     mapping::Dict{Char, UInt32}
     reverse_mapping::Vector{Char}
     structures::Dict{Char, CharStructure}
 end
-DependencyGraph() = DependencyGraph(
+IDSGraph() = IDSGraph(
         SimpleDiGraph{UInt32}(),
         Dict{Char, UInt32}(),
         Vector{Char}(),
         Dict{Char, CharStructure}())
 
-function LightGraphs.add_vertex!(dep::DependencyGraph, vertex::Char)
+function LightGraphs.add_vertex!(dep::IDSGraph, vertex::Char)
     if !haskey(dep.mapping, vertex)
         add_vertex!(dep.graph)
         dep.mapping[vertex] = nv(dep.graph)
@@ -25,21 +25,21 @@ function LightGraphs.add_vertex!(dep::DependencyGraph, vertex::Char)
     nothing
 end
 
-function LightGraphs.add_edge!(dep::DependencyGraph, from::Char, to::Char)
+function LightGraphs.add_edge!(dep::IDSGraph, from::Char, to::Char)
     add_vertex!(dep, from)
     add_vertex!(dep, to)
     add_edge!(dep.graph, dep.mapping[from], dep.mapping[to])
     nothing
 end
 
-function add_structure!(dep::DependencyGraph, vertex::Char, structure::CharStructure)
+function add_structure!(dep::IDSGraph, vertex::Char, structure::CharStructure)
     dep.structures[vertex] = structure
     nothing
 end
 
-Base.getindex(dep::DependencyGraph, char::Char) = dep.structures[char]
-Base.length(dep::DependencyGraph) = nv(dep.graph)
-LightGraphs.nv(dep::DependencyGraph) = nv(dep.graph)
+Base.getindex(dep::IDSGraph, char::Char) = dep.structures[char]
+Base.length(dep::IDSGraph) = nv(dep.graph)
+LightGraphs.nv(dep::IDSGraph) = nv(dep.graph)
 
 function load_dependency_graph()
     # artifact management
@@ -59,7 +59,7 @@ function load_dependency_graph()
 
     pattern = r"^[^\s]+\s+([^\s])\s+(.+)$"
 
-    dep = DependencyGraph()
+    dep = IDSGraph()
 
     for line in eachline(file)
         startswith(line, "#") && continue
@@ -81,23 +81,23 @@ end
 
 # Functions on dependency graphs
 # ------------------------------
-components(dep::DependencyGraph, char::Char) =
+components(dep::IDSGraph, char::Char) =
     (dep.reverse_mapping[code] for code in inneighbors(dep.graph, dep.mapping[char]))
 
-compounds(dep::DependencyGraph, char::Char) =
+compounds(dep::IDSGraph, char::Char) =
     (dep.reverse_mapping[code] for code in outneighbors(dep.graph, dep.mapping[char]))
 
-function subgraph(dep::DependencyGraph, condition)
+function subgraph(dep::IDSGraph, condition)
     vlist = [v for v in vertices(dep.graph) if condition(v)]
-    length(vlist) == 0 && return DependencyGraph()
+    length(vlist) == 0 && return IDSGraph()
     sg, vmap = induced_subgraph(dep.graph, vlist)
 
     reverse_mapping = [dep.reverse_mapping[vmap[sg_code]] for sg_code in 1:length(vlist)]
     mapping = Dict(char => sg_code for (sg_code, char) in enumerate(reverse_mapping))
     structures = Dict(char => structure for (char, structure) in dep.structures if haskey(mapping, char))
 
-    DependencyGraph(sg, mapping, reverse_mapping, structures)
+    IDSGraph(sg, mapping, reverse_mapping, structures)
 end
 
-topological_sort(dep::DependencyGraph) =
+topological_sort(dep::IDSGraph) =
     (dep.reverse_mapping[code] for code in LightGraphs.Traversals.topological_sort(dep.graph))

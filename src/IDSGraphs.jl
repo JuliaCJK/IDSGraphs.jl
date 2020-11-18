@@ -1,4 +1,4 @@
-module IDSFiles
+module IDSGraphs
 
 using Pkg.Artifacts
 
@@ -8,7 +8,7 @@ HorizontalThirdsStructure, CenterNestedStructure, BottomNestedStructure, TopNest
 RightNestedStructure, BottomRightNestedStructure, BottomLeftNestedStructure,
 TopRightNestedStructure, OverlapStructure, CharStructure,
 
-DependencyGraph
+IDSGraph
 
 # code
 include("structures.jl")
