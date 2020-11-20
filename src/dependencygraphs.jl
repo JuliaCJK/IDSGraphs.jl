@@ -4,17 +4,59 @@ using Pkg.Artifacts
 
 # Dependency graph struct creation
 # --------------------------------
-struct IDSGraph
+struct IDSGraph <: AbstractGraph{Char}
     graph::SimpleDiGraph{UInt32}
     mapping::Dict{Char, UInt32}
     reverse_mapping::Vector{Char}
     structures::Dict{Char, CharStructure}
 end
-IDSGraph() = IDSGraph(
+function IDSGraph()
+     IDSGraph(
         SimpleDiGraph{UInt32}(),
         Dict{Char, UInt32}(),
         Vector{Char}(),
         Dict{Char, CharStructure}())
+end
+function IDSGraph(filename::AbstractString)
+    pattern = r"^[^\s]+\s+([^\s])\s+(.+)$"
+
+    dep = IDSGraph()
+
+    for line in eachline(filename)
+        startswith(line, "#") && continue
+
+        m = match(pattern, line)
+        m === nothing && continue
+        char_str, ids_string = m.captures
+        char = first(char_str)
+
+        add_vertex!(dep, char)
+        for component in filter(c -> c ∉ range('⿰', '⿻', step = 1) && c != char, ids_string)
+            add_edge!(dep, component, char)
+        end
+        dep.structures[char] = parse(ids_string)
+    end
+
+    dep
+end
+function IDSGraph(src::Symbol)
+    # artifact management
+    artifact_toml = joinpath(@__DIR__, "Artifacts.toml")
+    ids_hash = artifact_hash("ids", artifact_toml)
+
+    if ids_hash === nothing || !artifact_exists(ids_hash)
+        ids_hash = create_artifact() do artifact_dir
+            ids_url = "https://raw.githubusercontent.com/cjkvi/cjkvi-ids/master/ids.txt"
+            download(ids_url, joinpath(artifact_dir, "ids.txt"))
+        end
+
+        bind_artifact!(artifact_toml, "ids", ids_hash)
+    end
+
+    filename = joinpath(artifact_path(ids_hash), "ids.txt")
+
+    IDSGraph(filename)
+end
 
 function LightGraphs.add_vertex!(dep::IDSGraph, vertex::Char)
     if !haskey(dep.mapping, vertex)
@@ -37,50 +79,21 @@ function add_structure!(dep::IDSGraph, vertex::Char, structure::CharStructure)
     nothing
 end
 
+# abstract graph interface
+struct IDSGraphIter <: AbstractEdgeIter end
+#LightGraphs.edges(dep::IDSGraph)
+#LightGraphs.edgetype(dep::IDSGraph) = LightGraphs.SimpleEdge{eltype}
 Base.getindex(dep::IDSGraph, char::Char) = dep.structures[char]
 Base.length(dep::IDSGraph) = nv(dep.graph)
 LightGraphs.nv(dep::IDSGraph) = nv(dep.graph)
 
-function load_dependency_graph()
-    # artifact management
-    artifact_toml = joinpath(@__DIR__, "Artifacts.toml")
-    ids_hash = artifact_hash("ids", artifact_toml)
-
-    if ids_hash === nothing || !artifact_exists(ids_hash)
-        ids_hash = create_artifact() do artifact_dir
-            ids_url = "https://raw.githubusercontent.com/cjkvi/cjkvi-ids/master/ids.txt"
-            download(ids_url, joinpath(artifact_dir, "ids.txt"))
-        end
-
-        bind_artifact!(artifact_toml, "ids", ids_hash)
-    end
-
-    file = joinpath(artifact_path(ids_hash), "ids.txt")
-
-    pattern = r"^[^\s]+\s+([^\s])\s+(.+)$"
-
-    dep = IDSGraph()
-
-    for line in eachline(file)
-        startswith(line, "#") && continue
-
-        m = match(pattern, line)
-        m === nothing && continue
-        char_str, ids_string = m.captures
-        char = first(char_str)
-
-        add_vertex!(dep, char)
-        for component in filter(c -> c ∉ range('⿰', '⿻', step = 1) && c != char, ids_string)
-            add_edge!(dep, component, char)
-        end
-        dep.structures[char] = parse(ids_string)
-    end
-
-    dep
-end
-
 # Functions on dependency graphs
 # ------------------------------
+"""
+    components(idsgraph, char)
+
+The components
+"""
 components(dep::IDSGraph, char::Char) =
     (dep.reverse_mapping[code] for code in inneighbors(dep.graph, dep.mapping[char]))
 

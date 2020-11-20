@@ -8,7 +8,7 @@ HorizontalThirdsStructure, CenterNestedStructure, BottomNestedStructure, TopNest
 RightNestedStructure, BottomRightNestedStructure, BottomLeftNestedStructure,
 TopRightNestedStructure, OverlapStructure, CharStructure,
 
-IDSGraph
+IDSGraph, components, compounds
 
 # code
 include("structures.jl")

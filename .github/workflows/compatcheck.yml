@@ -1,4 +1,4 @@
-name: CompatHelper (Dependency Compatibility Checking)
+name: CompatHelper
 on:
   schedule:
     - cron: '00 00 * * *'
@@ -11,5 +11,6 @@ jobs:
         run: julia -e 'using Pkg; Pkg.add("CompatHelper")'
       - name: Check Compatibility
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMPATHELPER_PRIV: ${{ secrets.DOCUMENTER_KEY }}
         run: julia -e 'using CompatHelper; CompatHelper.main()'
