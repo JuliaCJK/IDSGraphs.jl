@@ -64,28 +64,57 @@ function LightGraphs.add_vertex!(dep::IDSGraph, vertex::Char)
         dep.mapping[vertex] = nv(dep.graph)
         push!(dep.reverse_mapping, vertex)
     end
-    nothing
+    dep
 end
 
 function LightGraphs.add_edge!(dep::IDSGraph, from::Char, to::Char)
     add_vertex!(dep, from)
     add_vertex!(dep, to)
     add_edge!(dep.graph, dep.mapping[from], dep.mapping[to])
-    nothing
+    dep
 end
 
 function add_structure!(dep::IDSGraph, vertex::Char, structure::CharStructure)
     dep.structures[vertex] = structure
-    nothing
+    dep
 end
 
+# new edge type
+struct CharEdge <: LightGraphs.AbstractEdge{Char}
+    src::Char
+    dest::Char
+end
+
+LightGraphs.src(c::CharEdge) = c.src
+LightGraphs.dst(c::CharEdge) = c.dest
+
 # abstract graph interface
-struct IDSGraphIter <: AbstractEdgeIter end
-#LightGraphs.edges(dep::IDSGraph)
-#LightGraphs.edgetype(dep::IDSGraph) = LightGraphs.SimpleEdge{eltype}
+LightGraphs.vertices(dep::IDSGraph) = (v for v in dep.reverse_mapping)
+LightGraphs.edges(dep::IDSGraph) = (CharEdge(src(edge), dst(edge)) for edge in edges(dep.graph))
+
+Base.eltype(::Type{IDSGraph}) = Char
+
+LightGraphs.edgetype(dep::IDSGraph) = CharEdge
+
+#LightGraphs.has_contiguous_vertices(::Type{IDSGraph}) = false
+
+LightGraphs.has_vertex(dep::IDSGraph, v) = haskey(dep.mapping, v)
+LightGraphs.has_edge(dep::IDSGraph, s, d) =
+    LightGraphs.has_edge(dep.graph, dep.mapping[s], dep.mapping[d])
+
+LightGraphs.inneighbors(dep::IDSGraph, v) = collect(components(dep, v))
+LightGraphs.outneighbors(dep::IDSGraph, v) = collect(compounds(dep, v))
+
+LightGraphs.ne(dep::IDSGraph) = LightGraphs.ne(dep.graph)
+LightGraphs.nv(dep::IDSGraph) = LightGraphs.nv(dep.graph)
+
+Base.zero(dep::IDSGraph) = IDSGraph()
+
+LightGraphs.is_directed(::Type{IDSGraph}) = true
+
 Base.getindex(dep::IDSGraph, char::Char) = dep.structures[char]
 Base.length(dep::IDSGraph) = nv(dep.graph)
-LightGraphs.nv(dep::IDSGraph) = nv(dep.graph)
+
 
 # Functions on dependency graphs
 # ------------------------------

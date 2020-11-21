@@ -1,4 +1,6 @@
 using IDSGraphs
+using LightGraphs
+
 using Test
 
 @testset "unit tests" begin
@@ -7,6 +9,7 @@ using Test
     end
 
     @testset "graph creation" begin
+        g = IDSGraph()
 
     end
 
