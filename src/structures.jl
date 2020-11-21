@@ -13,52 +13,54 @@ struct LeftRightStructure{L<:AbstractCharStructure, R<:AbstractCharStructure} <:
     left::L
     right::R
 end
-struct TopBottomStructure <: AbstractCharStructure
-    top::AbstractCharStructure
-    bottom::AbstractCharStructure
+struct TopBottomStructure{T<:AbstractCharStructure, B<:AbstractCharStructure} <: AbstractCharStructure
+    top::T
+    bottom::B
 end
-struct VerticalThirdsStructure <: AbstractCharStructure
-    left::AbstractCharStructure
-    middle::AbstractCharStructure
-    right::AbstractCharStructure
+struct VerticalThirdsStructure{L<:AbstractCharStructure, M<:AbstractCharStructure, R<:AbstractCharStructure} <:
+AbstractCharStructure
+    left::L
+    middle::M
+    right::R
 end
-struct HorizontalThirdsStructure <: AbstractCharStructure
-    top::AbstractCharStructure
-    middle::AbstractCharStructure
-    bottom::AbstractCharStructure
+struct HorizontalThirdsStructure{T<:AbstractCharStructure, M<:AbstractCharStructure, B<:AbstractCharStructure} <:
+AbstractCharStructure
+    top::T
+    middle::M
+    bottom::B
 end
-abstract type NestedStructure <: AbstractCharStructure end
-struct CenterNestedStructure <: NestedStructure
-    inside::AbstractCharStructure
-    outside::AbstractCharStructure
+abstract type NestedStructure{I<:AbstractCharStructure, O<:AbstractCharStructure} <: AbstractCharStructure end
+struct CenterNestedStructure{I, O} <: NestedStructure{I, O}
+    inside::I
+    outside::O
 end
-struct BottomNestedStructure <: NestedStructure
-    inside::AbstractCharStructure
-    outside::AbstractCharStructure
+struct BottomNestedStructure{I, O} <: NestedStructure{I, O}
+    inside::I
+    outside::O
 end
-struct TopNestedStructure <: NestedStructure
-    inside::AbstractCharStructure
-    outside::AbstractCharStructure
+struct TopNestedStructure{I, O} <: NestedStructure{I, O}
+    inside::I
+    outside::O
 end
-struct RightNestedStructure <: NestedStructure
-    inside::AbstractCharStructure
-    outside::AbstractCharStructure
+struct RightNestedStructure{I, O} <: NestedStructure{I, O}
+    inside::I
+    outside::O
 end
-struct BottomRightNestedStructure <: NestedStructure
-    inside::AbstractCharStructure
-    outside::AbstractCharStructure
+struct BottomRightNestedStructure{I, O} <: NestedStructure{I, O}
+    inside::I
+    outside::O
 end
-struct BottomLeftNestedStructure <: NestedStructure
-    inside::AbstractCharStructure
-    outside::AbstractCharStructure
+struct BottomLeftNestedStructure{I, O} <: NestedStructure{I, O}
+    inside::I
+    outside::O
 end
-struct TopRightNestedStructure <: NestedStructure
-    inside::AbstractCharStructure
-    outside::AbstractCharStructure
+struct TopRightNestedStructure{I, O} <: NestedStructure{I, O}
+    inside::I
+    outside::O
 end
-struct OverlapStructure <: AbstractCharStructure
-    front::AbstractCharStructure
-    back::AbstractCharStructure
+struct OverlapStructure{F<:AbstractCharStructure, B<:AbstractCharStructure} <: AbstractCharStructure
+    front::F
+    back::B
 end
 
 struct CharStructure{T<:AbstractCharStructure}
