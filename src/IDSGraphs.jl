@@ -1,16 +1,18 @@
 module IDSGraphs
 
-using Pkg.Artifacts
-
 # exports
-export Component, LeftRightStructure, TopBottomStructure, VerticalThirdsStructure,
+export
+
+# structure
+Component, LeftRightStructure, TopBottomStructure, VerticalThirdsStructure,
 HorizontalThirdsStructure, CenterNestedStructure, BottomNestedStructure, TopNestedStructure,
 RightNestedStructure, BottomRightNestedStructure, BottomLeftNestedStructure,
 TopRightNestedStructure, OverlapStructure, CharStructure,
 
+# graph & new graph-related functions (LightGraphs not reexported)
 IDSGraph, components, compounds
 
-# code
+
 include("structures.jl")
 include("dependencygraphs.jl")
 

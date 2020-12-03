@@ -41,19 +41,24 @@ function IDSGraph(filename::AbstractString)
 end
 function IDSGraph(src::Symbol)
     # artifact management
-    artifact_toml = joinpath(@__DIR__, "Artifacts.toml")
-    ids_hash = artifact_hash("ids", artifact_toml)
+    if src == :ids
+        artifact_toml = joinpath(@__DIR__, "Artifacts.toml")
+        ids_hash = artifact_hash("ids", artifact_toml)
 
-    if ids_hash === nothing || !artifact_exists(ids_hash)
-        ids_hash = create_artifact() do artifact_dir
-            ids_url = "https://raw.githubusercontent.com/cjkvi/cjkvi-ids/master/ids.txt"
-            download(ids_url, joinpath(artifact_dir, "ids.txt"))
+        if ids_hash === nothing || !artifact_exists(ids_hash)
+            ids_hash = create_artifact() do artifact_dir
+                ids_url = "https://raw.githubusercontent.com/cjkvi/cjkvi-ids/master/ids.txt"
+                @info "Downloading IDS file from $(ids_url)..."
+                download(ids_url, joinpath(artifact_dir, "ids.txt"))
+            end
+
+            bind_artifact!(artifact_toml, "ids", ids_hash)
         end
 
-        bind_artifact!(artifact_toml, "ids", ids_hash)
+        filename = joinpath(artifact_path(ids_hash), "ids.txt")
+    else
+        throw(ArgumentError("unknown identifier $(src) for a IDS file"))
     end
-
-    filename = joinpath(artifact_path(ids_hash), "ids.txt")
 
     IDSGraph(filename)
 end
@@ -106,7 +111,7 @@ LightGraphs.inneighbors(dep::IDSGraph, v) = collect(components(dep, v))
 LightGraphs.outneighbors(dep::IDSGraph, v) = collect(compounds(dep, v))
 
 LightGraphs.ne(dep::IDSGraph) = LightGraphs.ne(dep.graph)
-LightGraphs.nv(dep::IDSGraph) = LightGraphs.nv(dep.graph)
+LightGraphs.nv(dep::IDSGraph) = length(dep.reverse_mapping)
 
 Base.zero(dep::IDSGraph) = IDSGraph()
 

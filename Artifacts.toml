@@ -1,7 +1,0 @@
-[ids]
-git-tree-sha1 = "ca9246bdc04913f5872c275c1f375e5fdcd04035"
-lazy = true
-
-    [[ids.download]]
-    url = "https://github.com/tmthyln/IDSFiles.jl/releases/download/v0.0.1/ids.tar.gz"
-    sha256 = "be271d0d92f5cd0059e507b96a7ceafc009df52ccee5df8c56a64a739edd5737"
