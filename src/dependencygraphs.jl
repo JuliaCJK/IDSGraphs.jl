@@ -18,20 +18,18 @@ function IDSGraph()
         Dict{Char, CharStructure}())
 end
 function IDSGraph(filename::AbstractString)
-    pattern = r"^[^\s]+\s+([^\s])\s+(.+)$"
-
     dep = IDSGraph()
 
     for line in eachline(filename)
         startswith(line, "#") && continue
 
-        m = match(pattern, line)
+        m = match(r"^[^\s]+\s+([^\s])\s+(.+)$", line)
         m === nothing && continue
         char_str, ids_string = m.captures
         char = first(char_str)
 
         add_vertex!(dep, char)
-        for component in filter(c -> c ∉ range('⿰', '⿻', step = 1) && c != char, ids_string)
+        for component in filter(c -> c ∉ '⿰':'⿻' && c != char, ids_string)
             add_edge!(dep, component, char)
         end
         dep.structures[char] = parse(ids_string)

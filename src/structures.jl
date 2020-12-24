@@ -69,8 +69,8 @@ end
 
 # Structure Parsing
 # -----------------
-function parse(tokens::Stack{Char})::AbstractCharStructure
-    next = pop!(tokens)
+function parse(tokens)::AbstractCharStructure
+    next = take!(tokens)
     if next == '⿰'
         LeftRightStructure(parse(tokens), parse(tokens))
     elseif next == '⿱'
@@ -118,8 +118,8 @@ CharStructure{TopBottomStructure}(TopBottomStructure(Component('此'), Component
 
 """
 function parse(str::AbstractString)
-    tokens = Stack{Char}()
-    for char in reverse(str)
+    tokens = Channel{Char}(length(str))
+    for char in Iterators.reverse(str)
         push!(tokens, char)
     end
     CharStructure(parse(tokens))
