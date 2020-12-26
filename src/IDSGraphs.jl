@@ -7,7 +7,7 @@ export
 Component, LeftRightStructure, TopBottomStructure, VerticalThirdsStructure,
 HorizontalThirdsStructure, CenterNestedStructure, BottomNestedStructure, TopNestedStructure,
 RightNestedStructure, BottomRightNestedStructure, BottomLeftNestedStructure,
-TopRightNestedStructure, OverlapStructure, CharStructure,
+TopRightNestedStructure, OverlapStructure,
 
 # graph & new graph-related functions (LightGraphs not reexported)
 IDSGraph, components, compounds

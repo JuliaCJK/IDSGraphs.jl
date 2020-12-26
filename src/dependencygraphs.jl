@@ -8,14 +8,14 @@ struct IDSGraph <: AbstractGraph{Char}
     graph::SimpleDiGraph{UInt32}
     mapping::Dict{Char, UInt32}
     reverse_mapping::Vector{Char}
-    structures::Dict{Char, CharStructure}
+    structures::Dict{Char, AbstractCharStructure}
 end
 function IDSGraph()
      IDSGraph(
         SimpleDiGraph{UInt32}(),
         Dict{Char, UInt32}(),
         Vector{Char}(),
-        Dict{Char, CharStructure}())
+        Dict{Char, AbstractCharStructure}())
 end
 function IDSGraph(filename::AbstractString)
     dep = IDSGraph()
@@ -40,25 +40,10 @@ end
 function IDSGraph(src::Symbol)
     # artifact management
     if src == :ids
-        artifact_toml = joinpath(@__DIR__, "Artifacts.toml")
-        ids_hash = artifact_hash("ids", artifact_toml)
-
-        if ids_hash === nothing || !artifact_exists(ids_hash)
-            ids_hash = create_artifact() do artifact_dir
-                ids_url = "https://raw.githubusercontent.com/cjkvi/cjkvi-ids/master/ids.txt"
-                @info "Downloading IDS file from $(ids_url)..."
-                download(ids_url, joinpath(artifact_dir, "ids.txt"))
-            end
-
-            bind_artifact!(artifact_toml, "ids", ids_hash)
-        end
-
-        filename = joinpath(artifact_path(ids_hash), "ids.txt")
+        return IDSGraph(joinpath(artifact"ids", "ids.txt"))
     else
         throw(ArgumentError("unknown identifier $(src) for a IDS file"))
     end
-
-    IDSGraph(filename)
 end
 
 function LightGraphs.add_vertex!(dep::IDSGraph, vertex::Char)
@@ -74,11 +59,6 @@ function LightGraphs.add_edge!(dep::IDSGraph, from::Char, to::Char)
     add_vertex!(dep, from)
     add_vertex!(dep, to)
     add_edge!(dep.graph, dep.mapping[from], dep.mapping[to])
-    dep
-end
-
-function add_structure!(dep::IDSGraph, vertex::Char, structure::CharStructure)
-    dep.structures[vertex] = structure
     dep
 end
 
@@ -132,7 +112,7 @@ components(dep::IDSGraph, char::Char) =
 compounds(dep::IDSGraph, char::Char) =
     (dep.reverse_mapping[code] for code in outneighbors(dep.graph, dep.mapping[char]))
 
-function subgraph(dep::IDSGraph, condition)
+function subgraph(condition, dep::IDSGraph)
     vlist = [v for v in vertices(dep.graph) if condition(v)]
     length(vlist) == 0 && return IDSGraph()
     sg, vmap = induced_subgraph(dep.graph, vlist)
@@ -144,5 +124,6 @@ function subgraph(dep::IDSGraph, condition)
     IDSGraph(sg, mapping, reverse_mapping, structures)
 end
 
+# TODO make this specialize LightGraphs.topological_sort
 topological_sort(dep::IDSGraph) =
     (dep.reverse_mapping[code] for code in LightGraphs.Traversals.topological_sort(dep.graph))

@@ -4,12 +4,12 @@ using LightGraphs
 using Test
 
 @testset "unit tests" begin
-    @testset "structure parsing" begin
+    @testset "graph creation" begin
+        g = IDSGraph()
 
     end
 
-    @testset "graph creation" begin
-        g = IDSGraph()
+    @testset "searching" begin
 
     end
 

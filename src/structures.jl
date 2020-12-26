@@ -1,4 +1,3 @@
-using DataStructures
 
 # Structure Types
 # ---------------
@@ -63,9 +62,6 @@ struct OverlapStructure{F<:AbstractCharStructure, B<:AbstractCharStructure} <: A
     back::B
 end
 
-struct CharStructure{T<:AbstractCharStructure}
-    structure::T
-end
 
 # Structure Parsing
 # -----------------
@@ -120,7 +116,8 @@ CharStructure{TopBottomStructure}(TopBottomStructure(Component('此'), Component
 function parse(str::AbstractString)
     tokens = Channel{Char}(length(str))
     for char in Iterators.reverse(str)
-        push!(tokens, char)
+        put!(tokens, char)
     end
-    CharStructure(parse(tokens))
+
+    return parse(tokens)
 end

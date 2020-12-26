@@ -1,0 +1,7 @@
+[ids]
+git-tree-sha1 = "b5dba14c6ce384a5b85dc1edf405270b3da387f6"
+lazy = true
+
+    [[ids.download]]
+    sha256 = "acdba1436e1d3828a2393e77b99eec54ab81d281d316d8292b4caaacc2a726b8"
+    url = "https://github.com/tmthyln/IDSGraphs.jl/releases/download/v0.2.0/ids.tar.gz"

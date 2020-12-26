@@ -8,7 +8,7 @@ julia> using IDSGraphs
 julia> IDSGraph()
 ```
 
-However, this isn't that useful, as we'd have to construct all the relationships ourselves. IDSGraphs can also load a default graph based on data from the [CHISE project](http://www.chise.org/). You can pass a symbol for which dataset to load.
+However, this isn't that useful, as we'd have to construct all the relationships ourselves. IDSGraphs can also load a default graph based on data from the [CHISE project](http://www.chise.org/) (this is not licensed under the same MIT license as the code). You can pass a symbol for which dataset to load, for several "default" datasets. Otherwise, you can load an IDS file from disk as well.
 ```@example
 julia> IDSGraph(:ids)
 ```

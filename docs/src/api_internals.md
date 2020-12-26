@@ -3,7 +3,3 @@ Note: any objects here are **not** part of the public API and are subject to cha
 
 ## Structure Parsing
 An explicit stack of characters is parsed to form a tree structure of `AbstractCharStructure` structs. This makes it easier to process and validate.
-
-```@docs 
-parse(::Stack{Char})
-```

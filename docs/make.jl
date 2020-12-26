@@ -1,7 +1,6 @@
 push!(LOAD_PATH, "../src/")
 
 using Documenter, IDSGraphs
-using DataStructures
 
 makedocs(
     sitename="IDSGraphs.jl Documentation",
