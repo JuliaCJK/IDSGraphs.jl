@@ -1,5 +1,7 @@
 module IDSGraphs
 
+using LazyArtifacts
+
 # exports
 export
 
