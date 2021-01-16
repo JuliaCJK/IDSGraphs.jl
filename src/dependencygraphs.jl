@@ -1,6 +1,6 @@
 using LightGraphs
 import LightGraphs: add_vertex!, add_edge!, SimpleDiGraph
-using Pkg.Artifacts
+using LazyArtifacts
 
 # Dependency graph struct creation
 # --------------------------------
