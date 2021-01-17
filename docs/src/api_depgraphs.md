@@ -1,2 +1,15 @@
 # Character Dependency Graphs
-A single IDS file is converted/represented as a graph where the vertices are components and the directed edges point from larger characters to components of characters. This graph type fully implements the AbstractGraph interface specified in LightGraphs.
+IDS data is converted/represented as a graph where the vertices are components and the directed edges point from larger characters to the components of the characters. This graph type fully implements the AbstractGraph interface specified in LightGraphs. An `IDSGraph` is also indexable, which returns the character structure of that character.
+
+```@docs
+IDSGraph
+```
+
+Besides the functionality in `LightGraphs.jl`, there are a few other functions provided to work with the graph structure:
+
+```@docs
+components
+compounds
+IDSGraphs.subgraph
+IDSGraphs.topological_sort
+```

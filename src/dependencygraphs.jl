@@ -4,12 +4,26 @@ using LazyArtifacts
 
 # Dependency graph struct creation
 # --------------------------------
+
+"""
+    IDSGraph([input])
+
+Create a graph representation of IDS data; if no input is provided, an empty graph will be
+created. The input can be a symbol representing a dataset to load, or it can be something
+readable by `eachline`.
+
+# Available IDS Datasets
+* `:ids` - the default IDS file
+"""
+IDSGraph
+
 struct IDSGraph <: AbstractGraph{Char}
     graph::SimpleDiGraph{UInt32}
     mapping::Dict{Char, UInt32}
     reverse_mapping::Vector{Char}
     structures::Dict{Char, AbstractCharStructure}
 end
+
 function IDSGraph()
      IDSGraph(
         SimpleDiGraph{UInt32}(),
@@ -17,7 +31,7 @@ function IDSGraph()
         Vector{Char}(),
         Dict{Char, AbstractCharStructure}())
 end
-function IDSGraph(filename::AbstractString)
+function IDSGraph(filename::Union{AbstractString, IO})
     dep = IDSGraph()
 
     for line in eachline(filename)
@@ -62,6 +76,7 @@ function LightGraphs.add_edge!(dep::IDSGraph, from::Char, to::Char)
 end
 
 # new edge type
+"""Graph edge between 2 `Char` instances."""
 struct CharEdge <: LightGraphs.AbstractEdge{Char}
     src::Char
     dest::Char
@@ -103,14 +118,57 @@ Base.length(dep::IDSGraph) = nv(dep.graph)
 """
     components(idsgraph, char)
 
-The components
+The components that make up a character.
+
+# Examples
+```julia-repl
+julia> g = IDSGraph(:ids);
+
+julia> collect(components(g, '㲉'))
+5-element Vector{Char}:
+ '一': Unicode U+4E00 (category Lo: Letter, other)
+ '冖': Unicode U+5196 (category Lo: Letter, other)
+ '士': Unicode U+58EB (category Lo: Letter, other)
+ '殳': Unicode U+6BB3 (category Lo: Letter, other)
+ '卵': Unicode U+5375 (category Lo: Letter, other)
+```
 """
 components(dep::IDSGraph, char::Char) =
     (dep.reverse_mapping[code] for code in inneighbors(dep.graph, dep.mapping[char]))
 
+"""
+    compounds(idsgraph, char)
+
+The characters that are compounds of the given character.
+
+# Examples
+```julia-repl
+julia> g = IDSGraph(:ids);
+
+julia> collect(compounds(g, '毛'))
+529-element Vector{Char}:
+ '兞': Unicode U+515E (category Lo: Letter, other)
+ '尾': Unicode U+5C3E (category Lo: Letter, other)
+ '宒': Unicode U+5B92 (category Lo: Letter, other)
+ '毳': Unicode U+6BF3 (category Lo: Letter, other)
+ '旄': Unicode U+65C4 (category Lo: Letter, other)
+ '枆': Unicode U+6786 (category Lo: Letter, other)
+ ⋮
+ '𭴎': Unicode U+2DD0E (category Lo: Letter, other)
+ '𭸶': Unicode U+2DE36 (category Lo: Letter, other)
+ '𮁠': Unicode U+2E060 (category Lo: Letter, other)
+ '𮊐': Unicode U+2E290 (category Lo: Letter, other)
+ '𮗥': Unicode U+2E5E5 (category Lo: Letter, other)
+```
+"""
 compounds(dep::IDSGraph, char::Char) =
     (dep.reverse_mapping[code] for code in outneighbors(dep.graph, dep.mapping[char]))
 
+"""
+    subgraph(condition, idsgraph)
+
+Create a subgraph keeping only vertices `v` where `condition(v) == true`.
+"""
 function subgraph(condition, dep::IDSGraph)
     vlist = [dep.mapping[v] for v in vertices(dep) if condition(v)]
     length(vlist) == 0 && return IDSGraph()
@@ -123,5 +181,10 @@ function subgraph(condition, dep::IDSGraph)
     IDSGraph(sg, mapping, reverse_mapping, structures)
 end
 
+"""
+    topological_sort(idsgraph)
+
+Create a topological ordering of the characters in this IDS graph.
+"""
 topological_sort(dep::IDSGraph) =
     (dep.reverse_mapping[code] for code in LightGraphs.topological_sort_by_dfs(dep.graph))
