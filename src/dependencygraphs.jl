@@ -38,7 +38,6 @@ function IDSGraph(filename::AbstractString)
     dep
 end
 function IDSGraph(src::Symbol)
-    # artifact management
     if src == :ids
         return IDSGraph(joinpath(artifact"ids", "ids.txt"))
     else
@@ -113,7 +112,7 @@ compounds(dep::IDSGraph, char::Char) =
     (dep.reverse_mapping[code] for code in outneighbors(dep.graph, dep.mapping[char]))
 
 function subgraph(condition, dep::IDSGraph)
-    vlist = [v for v in vertices(dep.graph) if condition(v)]
+    vlist = [dep.mapping[v] for v in vertices(dep) if condition(v)]
     length(vlist) == 0 && return IDSGraph()
     sg, vmap = induced_subgraph(dep.graph, vlist)
 
@@ -124,6 +123,5 @@ function subgraph(condition, dep::IDSGraph)
     IDSGraph(sg, mapping, reverse_mapping, structures)
 end
 
-# TODO make this specialize LightGraphs.topological_sort
 topological_sort(dep::IDSGraph) =
-    (dep.reverse_mapping[code] for code in LightGraphs.Traversals.topological_sort(dep.graph))
+    (dep.reverse_mapping[code] for code in LightGraphs.topological_sort_by_dfs(dep.graph))
