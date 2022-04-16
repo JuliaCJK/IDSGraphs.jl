@@ -1,5 +1,5 @@
-using LightGraphs
-import LightGraphs: add_vertex!, add_edge!, SimpleDiGraph
+using Graphs
+import Graphs: add_vertex!, add_edge!, SimpleDiGraph
 using LazyArtifacts
 
 # Dependency graph struct creation
@@ -59,7 +59,7 @@ function IDSGraph(src::Symbol)
     end
 end
 
-function LightGraphs.add_vertex!(dep::IDSGraph, vertex::Char)
+function Graphs.add_vertex!(dep::IDSGraph, vertex::Char)
     if !haskey(dep.mapping, vertex)
         add_vertex!(dep.graph)
         dep.mapping[vertex] = nv(dep.graph)
@@ -68,7 +68,7 @@ function LightGraphs.add_vertex!(dep::IDSGraph, vertex::Char)
     dep
 end
 
-function LightGraphs.add_edge!(dep::IDSGraph, from::Char, to::Char)
+function Graphs.add_edge!(dep::IDSGraph, from::Char, to::Char)
     add_vertex!(dep, from)
     add_vertex!(dep, to)
     add_edge!(dep.graph, dep.mapping[from], dep.mapping[to])
@@ -77,37 +77,37 @@ end
 
 # new edge type
 """Graph edge between 2 `Char` instances."""
-struct CharEdge <: LightGraphs.AbstractEdge{Char}
+struct CharEdge <: Graphs.AbstractEdge{Char}
     src::Char
     dest::Char
 end
 
-LightGraphs.src(c::CharEdge) = c.src
-LightGraphs.dst(c::CharEdge) = c.dest
+Graphs.src(c::CharEdge) = c.src
+Graphs.dst(c::CharEdge) = c.dest
 
 # abstract graph interface
-LightGraphs.vertices(dep::IDSGraph) = (v for v in dep.reverse_mapping)
-LightGraphs.edges(dep::IDSGraph) = (CharEdge(src(edge), dst(edge)) for edge in edges(dep.graph))
+Graphs.vertices(dep::IDSGraph) = (v for v in dep.reverse_mapping)
+Graphs.edges(dep::IDSGraph) = (CharEdge(src(edge), dst(edge)) for edge in edges(dep.graph))
 
 Base.eltype(::Type{IDSGraph}) = Char
 
-LightGraphs.edgetype(dep::IDSGraph) = CharEdge
+Graphs.edgetype(dep::IDSGraph) = CharEdge
 
-#LightGraphs.has_contiguous_vertices(::Type{IDSGraph}) = false
+#Graphs.has_contiguous_vertices(::Type{IDSGraph}) = false
 
-LightGraphs.has_vertex(dep::IDSGraph, v) = haskey(dep.mapping, v)
-LightGraphs.has_edge(dep::IDSGraph, s, d) =
-    LightGraphs.has_edge(dep.graph, dep.mapping[s], dep.mapping[d])
+Graphs.has_vertex(dep::IDSGraph, v) = haskey(dep.mapping, v)
+Graphs.has_edge(dep::IDSGraph, s, d) =
+    Graphs.has_edge(dep.graph, dep.mapping[s], dep.mapping[d])
 
-LightGraphs.inneighbors(dep::IDSGraph, v) = collect(components(dep, v))
-LightGraphs.outneighbors(dep::IDSGraph, v) = collect(compounds(dep, v))
+Graphs.inneighbors(dep::IDSGraph, v) = collect(components(dep, v))
+Graphs.outneighbors(dep::IDSGraph, v) = collect(compounds(dep, v))
 
-LightGraphs.ne(dep::IDSGraph) = LightGraphs.ne(dep.graph)
-LightGraphs.nv(dep::IDSGraph) = length(dep.reverse_mapping)
+Graphs.ne(dep::IDSGraph) = Graphs.ne(dep.graph)
+Graphs.nv(dep::IDSGraph) = length(dep.reverse_mapping)
 
 Base.zero(dep::IDSGraph) = IDSGraph()
 
-LightGraphs.is_directed(::Type{IDSGraph}) = true
+Graphs.is_directed(::Type{IDSGraph}) = true
 
 Base.getindex(dep::IDSGraph, char::Char) = dep.structures[char]
 Base.length(dep::IDSGraph) = nv(dep.graph)
@@ -184,7 +184,7 @@ end
 """
     topological_sort(idsgraph)
 
-Create a topological ordering of the characters in this IDS graph.
+Create a topological ordering of the characters in this IDS graph.s
 """
 topological_sort(dep::IDSGraph) =
-    (dep.reverse_mapping[code] for code in LightGraphs.topological_sort_by_dfs(dep.graph))
+    (dep.reverse_mapping[code] for code in Graphs.topological_sort_by_dfs(dep.graph))
