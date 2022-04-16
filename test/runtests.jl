@@ -1,5 +1,5 @@
 using IDSGraphs
-using LightGraphs
+using Graphs
 
 using Test
 
