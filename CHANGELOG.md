@@ -5,7 +5,7 @@
 
 ### v1.0.0
 
-
+- chore: bump min required Julia version to 1.6
 
 
 ## Initial Development
