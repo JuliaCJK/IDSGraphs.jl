@@ -20,7 +20,7 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/tmthyln/IDSGraphs.jl.git",
+    repo = "github.com/JuliaCJK/IDSGraphs.jl.git",
     devbranch = "main",
     devurl="latest"
     )

@@ -4,4 +4,4 @@ lazy = true
 
     [[ids.download]]
     sha256 = "acdba1436e1d3828a2393e77b99eec54ab81d281d316d8292b4caaacc2a726b8"
-    url = "https://github.com/tmthyln/IDSGraphs.jl/releases/download/v0.2.0/ids.tar.gz"
+    url = "https://github.com/JuliaCJK/IDSGraphs.jl/releases/download/v0.2.0/ids.tar.gz"

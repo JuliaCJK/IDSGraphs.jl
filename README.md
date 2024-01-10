@@ -1,9 +1,9 @@
 # IDSGraphs.jl
 
-![Unit Tests](https://github.com/tmthyln/IDSGraphs.jl/workflows/Unit%20Tests/badge.svg?branch=main)
-![Documentation](https://github.com/tmthyln/IDSGraphs.jl/workflows/Documentation/badge.svg)
+![Unit Tests](https://github.com/JuliaCJK/IDSGraphs.jl/workflows/Unit%20Tests/badge.svg?branch=main)
+[![Documentation](https://github.com/JuliaCJK/IDSGraphs.jl/workflows/Documentation/badge.svg)](https://juliacjk.github.io/IDSGraphs.jl/latest/)
 
-Julia package for reading and processing IDS files for CJK character decomposition. See the [documentation](https://tmthyln.github.io/IDSGraphs.jl/latest/) for more details, examples, and basic tutorials.
+Julia package for reading and processing IDS files for CJK character decomposition. See the [documentation](https://juliacjk.github.io/IDSGraphs.jl/latest/) for more details, examples, and basic tutorials.
 
 
 ## Installation
