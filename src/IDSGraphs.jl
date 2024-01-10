@@ -11,7 +11,7 @@ HorizontalThirdsStructure, CenterNestedStructure, BottomNestedStructure, TopNest
 RightNestedStructure, BottomRightNestedStructure, BottomLeftNestedStructure,
 TopRightNestedStructure, OverlapStructure,
 
-# graph & new graph-related functions (LightGraphs not reexported)
+# graph & new graph-related functions (Graphs not reexported)
 IDSGraph, components, compounds
 
 
