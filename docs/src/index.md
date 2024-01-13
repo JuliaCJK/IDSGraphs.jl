@@ -10,15 +10,9 @@ Still in early development! APIs have yet to be finalized, more basic features w
 
 ## Installation
 
-This package can be installed as usual via Pkg, either using
-
-```julia-repl
-julia> ] add IDSGraphs
-```
-
-or
+This package can be installed as usual via Pkg:
 
 ```julia-repl
 julia> using Pkg
-julia> Pkg.install("IDSGraphs")
+julia> Pkg.add("IDSGraphs")
 ```
