@@ -6,9 +6,6 @@ DocMeta.setdocmeta!(IDSGraphs, :DocTestSetup, :(using IDSGraphs); recursive=true
 
 makedocs(
     sitename="IDSGraphs.jl Documentation",
-    format=Documenter.HTML(
-        prettyurls=get(ENV, "CI", nothing) == "true"
-    ),
     #modules=[IDSGraphs],
     pages=[
         "Home" => "index.md",
