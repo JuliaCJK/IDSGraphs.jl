@@ -17,7 +17,7 @@ jobs:
     - name: Checkout Project
       uses: actions/checkout@v4
     - name: Setup Julia environment
-      uses: julia-actions/setup-julia@v1
+      uses: julia-actions/setup-julia@v1.4
       with:
         version: 1.10
     - name: Install dependencies
