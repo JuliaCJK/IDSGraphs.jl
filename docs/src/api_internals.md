@@ -1,6 +1,8 @@
 # Internal Functions & Structs
 
-Note: any objects here are **not** part of the public API and are subject to change at any time. You should not rely on any of these functions remaining the same across versions.
+!!! note
+
+    Anything only described here are **not** part of the public API and are subject to change at any time. You should not rely on any of these functions remaining the same across versions.
 
 
 ## Structure Parsing
