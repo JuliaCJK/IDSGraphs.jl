@@ -1,6 +1,7 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
+IDSGraphs = "9919d111-45a3-4056-8d55-3f6c887b9b09"
 
 [compat]
-Documenter = "0.25"
+Documenter = "1.2"
